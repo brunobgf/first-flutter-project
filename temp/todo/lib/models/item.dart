@@ -1,4 +1,5 @@
 class Item {
+  // Pode ser String ou null
   String? title;
   bool? done;
 
