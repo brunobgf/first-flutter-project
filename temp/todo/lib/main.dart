@@ -34,7 +34,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var newTaskController = TextEditingController();
-  //
+  // A lista sempre
   var items = <Item>[];
 
   @override
