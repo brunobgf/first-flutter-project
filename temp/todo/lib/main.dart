@@ -17,26 +17,39 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: HomePage(),
+      home: HomePage(
+        title: "Titulo com um sentido",
+      ),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  var items = <Item>[];
+  final String title;
 
+  const HomePage({super.key, required this.title});
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   var newTaskController = TextEditingController();
+  //
+  var items = <Item>[];
+
+  @override
+  void initState() {
+    print("init state");
+    // TODO: implement initState
+    super.initState();
+    load();
+  }
 
   void add() {
     setState(() {
       if (newTaskController.text.isEmpty) return;
 
-      widget.items.add(Item(
+      items.add(Item(
         title: newTaskController.text,
         done: false,
       ));
@@ -47,7 +60,7 @@ class _HomePageState extends State<HomePage> {
 
   void remove(int index) {
     setState(() {
-      widget.items.removeAt(index);
+      items.removeAt(index);
       save();
     });
   }
@@ -62,20 +75,14 @@ class _HomePageState extends State<HomePage> {
       Iterable decoded = jsonDecode(data);
       List<Item> result = decoded.map((task) => Item.fromJson(task)).toList();
       setState(() {
-        widget.items = result;
+        items = result;
       });
     }
   }
 
   save() async {
     var prefs = await SharedPreferences.getInstance();
-    await prefs.setString('data', jsonEncode(widget.items));
-  }
-
-  // Construtor chamando o método load
-
-  _HomePageState() {
-    load();
+    await prefs.setString('data', jsonEncode(items));
   }
 
   @override
@@ -90,14 +97,14 @@ class _HomePageState extends State<HomePage> {
             fontSize: 18,
           ),
           decoration: InputDecoration(
-              labelText: "Nova tarefa",
+              labelText: widget.title,
               labelStyle: TextStyle(color: Colors.white)),
         ),
       ),
       body: ListView.builder(
-        itemCount: widget.items.length,
+        itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
-          final item = widget.items[index];
+          final item = items[index];
           // ! - Garante que vem String
           // .toString() similar ao Java
           // ou essa versão utilizando interpolação
