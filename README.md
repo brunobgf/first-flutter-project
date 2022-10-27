@@ -2,6 +2,8 @@
 
 A simple to do app made to learn the initial principles about Flutter concepts such as: Stateless and Stateful Widgets, Material App, Scaffold, Set State and how to install dependencies.
 
+![Result](images/screen1.png "Screen")
+
 ## Resources
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
