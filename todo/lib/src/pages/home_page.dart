@@ -20,10 +20,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    loadItems();
+    _loadItems();
   }
 
-  void addItem() {
+  void _addItem() {
     setState(() {
       if (newTaskController.text.isEmpty) return;
 
@@ -33,18 +33,18 @@ class _HomePageState extends State<HomePage> {
       ));
 
       newTaskController.text = "";
-      saveItems();
+      _saveItems();
     });
   }
 
-  void removeItem(int index) {
+  void _removeItem(int index) {
     setState(() {
       items.removeAt(index);
-      saveItems();
+      _saveItems();
     });
   }
 
-  Future loadItems() async {
+  Future _loadItems() async {
     var prefs = await SharedPreferences.getInstance();
 
     var data = prefs.getString("data");
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  saveItems() async {
+  _saveItems() async {
     var prefs = await SharedPreferences.getInstance();
 
     await prefs.setString("data", jsonEncode(items));
@@ -88,18 +88,22 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (BuildContext context, int index) {
           final item = items[index];
           return Dismissible(
-            key: Key("${item.title}"),
+            key: Key(
+              "${item.title}",
+            ),
             background: Container(
               color: Colors.red.withOpacity(0.2),
             ),
-            onDismissed: (direction) => removeItem(index),
+            onDismissed: (direction) => _removeItem(index),
             child: CheckboxListTile(
-              title: Text("${item.title}"),
+              title: Text(
+                "${item.title}",
+              ),
               value: item.done,
               onChanged: (value) {
                 setState(() {
                   item.done = value;
-                  saveItems();
+                  _saveItems();
                 });
               },
             ),
@@ -107,8 +111,10 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: addItem,
-        child: Icon(Icons.add),
+        onPressed: () => _addItem(),
+        child: Icon(
+          Icons.add,
+        ),
         backgroundColor: Colors.deepPurple,
       ),
     );
